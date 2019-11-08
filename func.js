@@ -1,0 +1,161 @@
+var speed = 4;		// speed of cat multiplier]
+var step = 5;
+var teta;
+
+let c;				// canvas pointer
+let ctx;			// 2D context of canvas
+var cW, cH;			// canvas width and height
+
+var Xc, Yc, R;		// field center coords
+var Xp, Yp;			// player coords
+var Xcat, Ycat;		// cat coords
+var shiftp;			// is left shift pressed
+
+document.addEventListener('keydown', function (e) {
+    var code = e.keyCode;
+	
+	if (code == 16) shiftp = 1;
+	else if (code == 37) {			// left
+		if (shiftp) moveArc(false);
+		else moveLine(-step, 0);
+	}
+	else if (code == 38) {			// up
+		if (shiftp) moveArc(false);
+		else moveLine(0, -step);	
+	}
+	else if (code == 39) {			// right
+		if (shiftp) moveArc(true);
+		else moveLine(step, 0);		
+	}
+	else if (code == 40) {			// down
+		if (shiftp) moveArc(true);
+		else moveLine(0, step);		
+	}	
+	if (checkEndGame() == 1) {
+		alert("You win!");
+		ClearFun();
+	}
+	else if (checkEndGame() == -1) {
+		alert("You lose");
+		ClearFun();
+	}
+}, false);
+
+document.addEventListener('keyup', function (e) {
+    var code = e.keyCode;
+	if (code == 16) shiftp = 0;
+}, false);
+  
+function ClearFun()
+{
+	ctx.clearRect(0, 0, cW, cH);
+	//shiftp = 0;
+	DrawInitField();
+}
+
+function DrawInitField()
+{
+	Xc = cW/2.;
+	Yc = cH/2.;
+	R = cH/3.;
+	
+	Xcat = Xc;
+	Ycat = Yc-R;
+	Xp = Xc;
+	Yp = Yc;
+	
+	teta = step*speed/R;
+	
+	drawCat();
+	drawPlayer();
+}
+
+function Init()
+{
+    c = document.getElementById("myC0");
+
+	c.width = window.innerWidth*0.92;     // equals window dimension
+	c.height = window.innerHeight*0.92;
+	ctx = c.getContext("2d");
+	ctx.lineWidth = 2;
+	
+    cW = c.width;
+    cH = c.height;
+	
+	ClearFun();
+}
+
+function checkEndGame()
+{
+	if (Dist(Xp, Yp, Xc, Yc) < R) return 0;
+	else if (Dist(Xp, Yp, Xcat, Ycat) < 3) return -1;
+	else return 1;
+}
+
+function moveLine(dx, dy)
+{
+	ctx.clearRect(0, 0, cW, cH);
+	
+	Xp += dx;
+	Yp += dy;
+	drawPlayer();
+	
+	var fi1 = angleP(Xp, Yp);
+	var fi2 = angleP(Xcat, Ycat);
+	
+	var dfi = fi1-fi2;
+	if (dfi > Math.PI)  dfi -= 2*Math.PI;
+	if (dfi < -Math.PI) dfi += 2*Math.PI;
+	
+	if (Math.abs(dfi) < teta) {
+		Xcat = Xc + R*Math.cos(fi1);
+		Ycat = Yc + R*Math.sin(fi1);
+	}
+	else {
+		var dir = Math.sign(dfi);
+		Xcat = Xc + R*Math.cos(fi2 + dir*teta);
+		Ycat = Yc + R*Math.sin(fi2 + dir*teta);
+	}
+	drawCat();
+}
+
+// true = clockwise, false = anticlockwise
+function moveArc(cw)
+{
+	
+}
+
+function angleP(X, Y)
+{
+	return Math.atan2(Y-Yc, X-Xc);
+}
+
+function Dist(a, b, c, d)
+{
+	return Math.sqrt((a-c)*(a-c) + (b-d)*(b-d));
+}
+
+function drawCat()
+{
+	ctx.beginPath();	
+	ctx.arc(Xcat, Ycat, 3, 0, 2*Math.PI);		
+	ctx.stroke();
+	ctx.fillStyle = "#ff2626";
+	ctx.fill();		
+}
+
+function drawPlayer()
+{
+	ctx.beginPath();	
+	ctx.arc(Xp, Yp, 3, 0, 2*Math.PI);		
+	ctx.stroke();
+	ctx.fillStyle = "#2626ff";
+	ctx.fill();	
+}
+
+function sleep(ms) 
+{
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+

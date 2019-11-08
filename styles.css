@@ -1,0 +1,28 @@
+body {
+  background-color: #F6F8F9;
+}
+
+canvas, body {
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+}
+
+:focus {outline:0;}
+
+div {
+	margin: 0 auto;
+	text-align: center;
+}
+
+canvas {
+    background-color: white;
+	margin-right: -2px;
+	margin-left: -2px;
+	background: url(circle.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
