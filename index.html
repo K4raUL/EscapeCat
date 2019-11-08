@@ -6,9 +6,22 @@
   <script type="text/javascript" src="func.js"></script>
 </head>
 <body onload="Init()">
-		<div style="font-size:20px;">
-			<b style="color:red;">Cat</b> moves <b>4</b> times faster than <b style="color:blue;">you</b>. <u>Try</u> to escape!
+
+        <!-- Модальное окно №1 -->
+        <a href="#x" class="overlay" id="win1"></a>
+        <div class="popup">
+        <text style="color:blue; text-decoration: underline;">CONTROLS:</text><br/>
+        <b>Del</b>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;- restart<br/>
+        <b>Arrows</b>&emsp;&emsp;&emsp;&emsp;&emsp;- move blue dot<br/>
+        <b>Shift+Arrows</b>&emsp;&emsp;- move blue dot along circle<br/>
+        <b>Ctrl+Arrows</b>&emsp;&emsp; - move blue dot shorter way to edge<br/>
+        <a class="close"title="Закрыть" href="#close"></a>
+        </div>
+		<div>
+			<b style="color:red;">Cat</b> moves <b>4</b> times faster than <b style="color:blue;">you</b>. 
+            <u onclick="clickTip()">Try</u> to escape!
 		</div>
+        <div><a href="#win1" class="linkbutton"><i><u>Help</u></i></a></div>
 		<p></p>
         <div>
             <canvas id="myC0">Your browser does not support the HTML5 canvas tag.</canvas>
