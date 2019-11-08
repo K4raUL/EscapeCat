@@ -87,8 +87,8 @@ function Init()
 
 function checkEndGame()
 {
-	if (Dist(Xp, Yp, Xc, Yc) < R) return 0;
-	else if (Dist(Xp, Yp, Xcat, Ycat) < 4.) return -1;
+	if (Dist(Xp, Yp, Xc, Yc) < R-1) return 0;
+	else if (Dist(Xp, Yp, Xcat, Ycat) < 6.) return -1;
 	else return 1;
 }
 
