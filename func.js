@@ -16,10 +16,10 @@ document.addEventListener('keydown', function (e) {
     var code = e.keyCode;
 	
 	if (code == 16) shiftp = 1;
-    else if (code == 17) {}
+    else if (code == 13) moveShortest();
 	else if (code == 37) {			// left
 		if (shiftp) moveArc(false);
-		else moveLine(-step, 0);
+        else moveLine(-step, 0);
 	}
 	else if (code == 38) {			// up
 		if (shiftp) moveArc(false);
@@ -143,6 +143,25 @@ function moveArc(cw)
     
     calcCat();
     if (tipped) showTip();
+}
+
+function moveShortest()
+{    
+    ctx.clearRect(0, 0, cW, cH);
+    var fi1 = angleP(Xp, Yp);
+    
+    Xp += step*Math.cos(fi1);
+	Yp += step*Math.sin(fi1);
+    drawPlayer();
+    
+    if (checkEndGame()) {
+		alert(checkEndGame() == 1 ? "You win!" : "You lose.");
+		ClearFun();
+        return
+	}     
+    
+    calcCat();
+    if (tipped) showTip();    
 }
 
 function angleP(X, Y)
