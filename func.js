@@ -184,7 +184,7 @@ function clickTip()
 function showTip()
 {
  	ctx.beginPath();	
-    ctx.setLineDash([5, 15]);
+    ctx.setLineDash([6, 16]);
 	ctx.arc(Xc, Yc, R/4., 0, 2*Math.PI);		
 	ctx.stroke();   
 }
