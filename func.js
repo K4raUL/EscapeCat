@@ -10,11 +10,13 @@ var Xc, Yc, R;		// field center coords
 var Xp, Yp;			// player coords
 var Xcat, Ycat;		// cat coords
 var shiftp;			// is left shift pressed
+var tipped = 0;
 
 document.addEventListener('keydown', function (e) {
     var code = e.keyCode;
 	
 	if (code == 16) shiftp = 1;
+    else if (code == 17) {}
 	else if (code == 37) {			// left
 		if (shiftp) moveArc(false);
 		else moveLine(-step, 0);
@@ -31,14 +33,7 @@ document.addEventListener('keydown', function (e) {
 		if (shiftp) moveArc(true);
 		else moveLine(0, step);		
 	}	
-	if (checkEndGame() == 1) {
-		alert("You win!");
-		ClearFun();
-	}
-	else if (checkEndGame() == -1) {
-		alert("You lose");
-		ClearFun();
-	}
+    else if (code == 46) ClearFun();
 }, false);
 
 document.addEventListener('keyup', function (e) {
@@ -50,6 +45,7 @@ function ClearFun()
 {
 	ctx.clearRect(0, 0, cW, cH);
 	//shiftp = 0;
+    tipped = 0;
 	DrawInitField();
 }
 
@@ -74,8 +70,8 @@ function Init()
 {
     c = document.getElementById("myC0");
 
-	c.width = window.innerWidth*0.92;     // equals window dimension
-	c.height = window.innerHeight*0.92;
+	c.width = window.innerWidth*0.835;     // equals window dimension
+	c.height = window.innerHeight*0.85;
 	ctx = c.getContext("2d");
 	ctx.lineWidth = 2;
 	
@@ -88,7 +84,7 @@ function Init()
 function checkEndGame()
 {
 	if (Dist(Xp, Yp, Xc, Yc) < R-1) return 0;
-	else if (Dist(Xp, Yp, Xcat, Ycat) < 6.) return -1;
+	else if (Dist(Xp, Yp, Xcat, Ycat) < 6.1) return -1;
 	else return 1;
 }
 
@@ -99,7 +95,19 @@ function moveLine(dx, dy)
 	Xp += dx;
 	Yp += dy;
 	drawPlayer();
+    
+    if (checkEndGame()) {
+		alert(checkEndGame() == 1 ? "You win!" : "You lose.");
+		ClearFun();
+        return
+	}
 	
+    calcCat();
+    if (tipped) showTip();
+}
+
+function calcCat()
+{
 	var fi1 = angleP(Xp, Yp);
 	var fi2 = angleP(Xcat, Ycat);
 	
@@ -116,13 +124,25 @@ function moveLine(dx, dy)
 		Xcat = Xc + R*Math.cos(fi2 + dir*teta);
 		Ycat = Yc + R*Math.sin(fi2 + dir*teta);
 	}
-	drawCat();
+	drawCat();    
 }
 
 // true = clockwise, false = anticlockwise
 function moveArc(cw)
 {
-	
+	ctx.clearRect(0, 0, cW, cH);
+    
+    var r = Dist(Xp, Yp, Xc, Yc);
+    var fi1 = angleP(Xp, Yp);
+    var dir = cw ? 1 : -1;
+    var teta0 = step/r;
+    
+    Xp = Xc + r*Math.cos(fi1 + dir*teta0);
+	Yp = Yc + r*Math.sin(fi1 + dir*teta0);
+    drawPlayer();
+    
+    calcCat();
+    if (tipped) showTip();
 }
 
 function angleP(X, Y)
@@ -138,7 +158,8 @@ function Dist(a, b, c, d)
 function drawCat()
 {
 	ctx.beginPath();	
-	ctx.arc(Xcat, Ycat, 3, 0, 2*Math.PI);		
+	ctx.arc(Xcat, Ycat, 3, 0, 2*Math.PI);	
+    ctx.setLineDash([]);	
 	ctx.stroke();
 	ctx.fillStyle = "#ff2626";
 	ctx.fill();		
@@ -148,9 +169,24 @@ function drawPlayer()
 {
 	ctx.beginPath();	
 	ctx.arc(Xp, Yp, 3, 0, 2*Math.PI);		
+    ctx.setLineDash([]);
 	ctx.stroke();
 	ctx.fillStyle = "#2626ff";
 	ctx.fill();	
+}
+
+function clickTip()
+{
+    tipped ^= 1;
+    if (tipped) showTip();
+}
+
+function showTip()
+{
+ 	ctx.beginPath();	
+    ctx.setLineDash([5, 15]);
+	ctx.arc(Xc, Yc, R/4., 0, 2*Math.PI);		
+	ctx.stroke();   
 }
 
 function sleep(ms) 
