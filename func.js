@@ -177,9 +177,19 @@ function Dist(a, b, c, d)
 function drawCat()
 {
 	ctx.beginPath();	
-	ctx.arc(Xcat, Ycat, 3, 0, 2*Math.PI);	
-    ctx.setLineDash([]);	
+	ctx.arc(Xcat, Ycat, 5, 0, 2*Math.PI);	
+    	ctx.setLineDash([]);	
 	ctx.stroke();
+	
+	ctx.beginPath();
+	ctx.MoveTo(Xcat-5, Ycat);
+	ctx.LineTo(Xcat-4, Ycat-7);
+	ctx.LineTo(Xcat-3, Ycat);
+	
+	ctx.MoveTo(Xcat+5, Ycat);
+	ctx.LineTo(Xcat+4, Ycat-7);
+	ctx.LineTo(Xcat+3, Ycat);
+	
 	ctx.fillStyle = "#ff2626";
 	ctx.fill();		
 }
@@ -188,7 +198,7 @@ function drawPlayer()
 {
 	ctx.beginPath();	
 	ctx.arc(Xp, Yp, 3, 0, 2*Math.PI);		
-    ctx.setLineDash([]);
+    	ctx.setLineDash([]);
 	ctx.stroke();
 	ctx.fillStyle = "#2626ff";
 	ctx.fill();	
